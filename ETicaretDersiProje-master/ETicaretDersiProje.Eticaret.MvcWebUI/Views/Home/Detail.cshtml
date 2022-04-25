@@ -1,0 +1,183 @@
+﻿@model ETicaretDersiProje.Eticaret.MvcWebUI.Models.HomeListViewModel
+@{
+    Layout = "../_LayoutPageHome.cshtml";
+}
+
+<div class="col-sm-9 padding-right">
+    <div class="product-details">
+        <!--product-details-->
+        <div class="col-sm-5">
+            <div class="view-product">
+                <img src="@Model.Product.Picture" alt="" />
+                <h3>ZOOM</h3>
+            </div>
+            <div id="similar-product" class="carousel slide" data-ride="carousel">
+
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <a href=""><img src="@Model.Product.Picture" alt=""></a>
+                       
+                    </div>
+                 
+
+                </div>
+
+                <!-- Controls -->
+                <a class="left item-control" href="#similar-product" data-slide="prev">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                <a class="right item-control" href="#similar-product" data-slide="next">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+
+        </div>
+        <div class="col-sm-7">
+            <div class="product-information">
+                <!--/product-information-->
+                <img src="images/product-details/new.jpg" class="newarrival" alt="" />
+                <span><span>% @Model.Product.Discount İNDİRİM</span></span>
+                <h2>@Model.Product.ProductName</h2>
+                <p><b>Firma : </b>@Model.Product.Supplier.CompanyName </p>
+                <img src="images/product-details/rating.png" alt="" />
+                <span>
+
+                    @if (@Session["email"] == null)
+                    {
+                        <p><b>Sepete ürün eklemek için giriş yapmalısınız!</b> </p>
+                        <h3><strike>@Model.Product.UnitPrice TL</strike></h3>
+                        <span>@(Model.Product.UnitPrice - (Model.Product.UnitPrice * Model.Product.Discount / 100)) TL</span>
+                        <a href="/Home/Login" style="cursor: text !important;">
+                            <button type="button" class="btn btn-fefault cart">
+                                <i class="fa fa-shopping-cart"></i>
+                                Sepete Ekle
+                            </button>
+                        </a>
+
+
+                    }
+                    else
+                    {
+                        <span>@Model.Product.UnitPrice TL</span>
+                        <a href="/Cart/AddCart/@Model.Product.ProductID">
+                            <button type="button" class="btn btn-fefault cart">
+                                <i class="fa fa-shopping-cart"></i>
+                                Sepete Ekle
+                            </button>
+                        </a>
+                    }
+                </span>
+                <p><b>Stok Durumu:</b> @Model.Product.QuantityPerUnit</p>
+                <p><b>Kategori:</b> @Model.Product.Category.CategoryName</p>
+                <p><b>Renk:</b> @Model.Product.Color.ColorValue</p>
+                
+                <a href=""><img src="images/product-details/share.png" class="share img-responsive" alt="" /></a>
+            </div><!--/product-information-->
+        </div>
+    </div><!--/product-details-->
+
+    <div class="category-tab shop-details-tab">
+        <!--category-tab-->
+        <div class="col-sm-12">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#details" data-toggle="tab">Ürün Detayları</a></li>
+                <li><a href="#companyprofile" data-toggle="tab">Marka Profili</a></li>
+               
+            </ul>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane fade active in" id="details">
+                <div class="col-sm-9">
+                    <div class="product-image-wrapper">
+                        <div class="single-products">
+                            
+                                
+                                <p>@Model.Product.ProductDescription</p>
+                                
+                           
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="tab-pane fade" id="companyprofile">
+                <div class="media commnets">
+                    <a class="pull-left" href="#">
+                        <img class="media-object" src="@Model.Product.Supplier.Logo" alt="" style="width:136px ;height:96px ">
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading">@Model.Product.Supplier.CompanyName</h4>
+                        <p> <b>Email:</b> @Model.Product.Supplier.Email</p><br />
+                        <p> <b>Telefon:</b> @Model.Product.Supplier.Phone</p><br/>
+                        <p> <b>İnternet Sayfası:</b>@Model.Product.Supplier.Website</p><br/>
+                        <p> <b>Şehir:</b>@Model.Product.Supplier.City</p><br />
+
+                      
+                    </div>
+                </div>
+          
+           
+            </div>
+
+           
+
+        </div>
+    </div><!--/category-tab-->
+
+    <div class="recommended_items">
+        <!--recommended_items-->
+        <h2 class="title text-center">Bu Kategorideki Ürünler</h2>
+
+        <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="item active">
+              @foreach (var item in Model.CurrentCategoryProduct)
+              {
+                  <div class="col-sm-4">
+                      <div class="product-image-wrapper">
+                          <div class="single-products">
+                              <div class="productinfo text-center">
+                                  <img src="@item.Picture" alt="" style="width:255px ;height:217px " />
+                                  <h2>@item.UnitPrice TL</h2>
+                                  <a href="/Home/Detail/@item.ProductID"><p>@item.ProductName</p></a>
+                              
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              }
+                   
+                </div>
+                <div class="item">
+              
+
+                 @foreach (var item in Model.CurrentCategoryProduct)
+                 {
+                     <div class="col-sm-4">
+                         <div class="product-image-wrapper">
+                             <div class="single-products">
+                                 <div class="productinfo text-center">
+                                     <img src="@item.Picture" alt="" style="width:255px ;height:217px " />
+                                     <h2>@item.UnitPrice TL</h2>
+                                     <a href="/Home/Detail/@item.ProductID"><p>@item.ProductName</p></a>
+                                 
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 }
+                </div>
+            </div>
+            <a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
+                <i class="fa fa-angle-left"></i>
+            </a>
+            <a class="right recommended-item-control" href="#recommended-item-carousel" data-slide="next">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        </div>
+    </div><!--/recommended_items-->
+
+</div>
+
